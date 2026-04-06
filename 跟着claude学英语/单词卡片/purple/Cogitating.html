@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cogitating - 跟着 Claude 学英语</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg-deep: #1a1025;
+    --bg-mid: #251a35;
+    --accent: #c084fc;
+    --accent-light: #e9d5ff;
+    --accent-dark: #a855f7;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255,255,255,0.7);
+    --text-muted: rgba(255,255,255,0.45);
+  }
+  
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', 'Noto Sans SC', sans-serif; }
+  
+  .card {
+    width: 1080px; height: 1920px; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #1a1025 0%, #251a35 30%, #1f1528 70%, #120a1a 100%);
+  }
+  
+  .blur-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.35;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb-1 { width: 500px; height: 500px; background: #c084fc; top: -150px; right: -100px; animation-delay: 0s; }
+  .orb-2 { width: 400px; height: 400px; background: #a855f7; bottom: 200px; left: -100px; animation-delay: -3s; }
+  .orb-3 { width: 300px; height: 300px; background: #e879f9; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -5s; opacity: 0.2; }
+  
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -30px); }
+  }
+  
+  .grid-overlay {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(rgba(192, 132, 252, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(192, 132, 252, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  
+  .content {
+    position: relative; z-index: 10;
+    padding: 140px 70px 120px;
+    height: 100%;
+    display: flex; flex-direction: column;
+  }
+  
+  .card-label {
+    font-size: 22px; font-weight: 500;
+    color: rgba(192, 132, 252, 0.7);
+    letter-spacing: 3px;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+  }
+  
+  .word-title {
+    font-size: 110px; font-weight: 900;
+    color: #fff;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #e9d5ff 50%, #c084fc 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .ipa {
+    font-size: 38px; font-weight: 400;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+  }
+  
+  .chinese {
+    font-size: 48px; font-weight: 700;
+    color: #c084fc;
+    margin-bottom: 50px;
+    letter-spacing: 2px;
+  }
+  
+  .divider {
+    width: 120px; height: 4px;
+    background: linear-gradient(90deg, #c084fc, transparent);
+    margin-bottom: 50px;
+    border-radius: 2px;
+  }
+  
+  .example-box {
+    background: rgba(192, 132, 252, 0.08);
+    border-left: 4px solid #c084fc;
+    padding: 35px 40px;
+    margin-bottom: 45px;
+    border-radius: 0 16px 16px 0;
+  }
+  
+  .example-text {
+    font-size: 34px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  
+  .section {
+    margin-bottom: 35px;
+  }
+  
+  .section-title {
+    font-size: 24px; font-weight: 700;
+    color: #c084fc;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .section-content {
+    font-size: 39px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+  }
+  
+  .hl { color: #e9d5ff; font-weight: 600; }
+  
+  .did-you-know {
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.12), rgba(168, 85, 247, 0.08));
+    border: 1px solid rgba(192, 132, 252, 0.25);
+    border-radius: 20px;
+    padding: 35px 40px;
+    margin-top: 20px;
+  }
+  
+  .did-you-know-title {
+    font-size: 26px; font-weight: 800;
+    color: #e9d5ff;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  
+  .did-you-know-title::before {
+    content: "💡";
+    font-size: 28px;
+  }
+  
+  .did-you-know-content {
+    font-size: 28px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+  }
+  
+  .did-you-know-content p {
+    margin-bottom: 12px;
+  }
+  
+  .did-you-know-content p:last-child {
+    margin-bottom: 0;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="blur-orb orb-1"></div>
+  <div class="blur-orb orb-2"></div>
+  <div class="blur-orb orb-3"></div>
+  <div class="grid-overlay"></div>
+  
+  <div class="content">
+    <div class="card-label">THINKING · 3 / 20</div>
+    
+    <div class="word-title">Cogitating</div>
+    <div class="ipa">/ˈkɒdʒɪteɪtɪŋ/</div>
+    <div class="chinese">认真思索 · 绞尽脑汁</div>
+    
+    <div class="divider"></div>
+    
+    <div class="example-box">
+      <div class="example-text">"The professor sat cogitating on the complex mathematical proof."</div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">WORD MEANING</div>
+      <div class="section-content">认真、系统地思考，常带有解决问题或得出结论的目的。比 think 更正式、更学术化。</div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">USAGE</div>
+      <div class="section-content">常见搭配：cogitate on/upon（认真思考）</div>
+    </div>
+    
+    <div class="did-you-know">
+      <div class="did-you-know-title">DID YOU KNOW?</div>
+      <div class="did-you-know-content">
+        <p><span class="hl">词源：</span>来自拉丁语 cogitare（思考），由 co-（共同）+ agitare（驱动）组成。</p>
+        <p><span class="hl">记忆技巧：</span>Cogitate 带有'动脑筋、苦思冥想'的意味，适合描述解决难题时的思考过程。</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

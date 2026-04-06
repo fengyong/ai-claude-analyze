@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caramelizing - 跟着 Claude 学英语</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg-deep: #1f140a;
+    --bg-mid: #2d1f12;
+    --accent: #f0a868;
+    --accent-light: #ffecd0;
+    --accent-dark: #d08040;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255,255,255,0.7);
+    --text-muted: rgba(255,255,255,0.45);
+  }
+  
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', 'Noto Sans SC', sans-serif; }
+  
+  .card {
+    width: 1080px; height: 1920px; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #1f140a 0%, #2d1f12 30%, #261a0f 70%, #150d06 100%);
+  }
+  
+  .blur-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.35;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb-1 { width: 500px; height: 500px; background: #f0a868; top: -150px; right: -100px; animation-delay: 0s; }
+  .orb-2 { width: 400px; height: 400px; background: #d08040; bottom: 200px; left: -100px; animation-delay: -3s; }
+  .orb-3 { width: 300px; height: 300px; background: #ffb080; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -5s; opacity: 0.2; }
+  
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -30px); }
+  }
+  
+  .grid-overlay {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(rgba(240, 168, 104, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240, 168, 104, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  
+  .content {
+    position: relative; z-index: 10;
+    padding: 140px 70px 120px;
+    height: 100%;
+    display: flex; flex-direction: column;
+  }
+  
+  .card-label {
+    font-size: 22px; font-weight: 500;
+    color: rgba(240, 168, 104, 0.7);
+    letter-spacing: 3px;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+  }
+  
+  .word-title {
+    font-size: 110px; font-weight: 900;
+    color: #fff;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #ffecd0 50%, #f0a868 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .ipa {
+    font-size: 38px; font-weight: 400;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+  }
+  
+  .chinese {
+    font-size: 48px; font-weight: 700;
+    color: #f0a868;
+    margin-bottom: 50px;
+    letter-spacing: 2px;
+  }
+  
+  .divider {
+    width: 120px; height: 4px;
+    background: linear-gradient(90deg, #f0a868, transparent);
+    margin-bottom: 50px;
+    border-radius: 2px;
+  }
+  
+  .example-box {
+    background: rgba(240, 168, 104, 0.08);
+    border-left: 4px solid #f0a868;
+    padding: 35px 40px;
+    margin-bottom: 45px;
+    border-radius: 0 16px 16px 0;
+  }
+  
+  .example-text {
+    font-size: 34px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  
+  .section {
+    margin-bottom: 35px;
+  }
+  
+  .section-title {
+    font-size: 24px; font-weight: 700;
+    color: #f0a868;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .section-content {
+    font-size: 39px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+  }
+  
+  .hl { color: #ffecd0; font-weight: 600; }
+  
+  .did-you-know {
+    background: linear-gradient(135deg, rgba(240, 168, 104, 0.12), rgba(208, 128, 64, 0.08));
+    border: 1px solid rgba(240, 168, 104, 0.25);
+    border-radius: 20px;
+    padding: 35px 40px;
+    margin-top: 20px;
+  }
+  
+  .did-you-know-title {
+    font-size: 26px; font-weight: 800;
+    color: #ffecd0;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  
+  .did-you-know-title::before {
+    content: "💡";
+    font-size: 28px;
+  }
+  
+  .did-you-know-content {
+    font-size: 28px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+  }
+  
+  .did-you-know-content p {
+    margin-bottom: 12px;
+  }
+  
+  .did-you-know-content p:last-child {
+    margin-bottom: 0;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="blur-orb orb-1"></div>
+  <div class="blur-orb orb-2"></div>
+  <div class="blur-orb orb-3"></div>
+  <div class="grid-overlay"></div>
+  
+  <div class="content">
+    <div class="card-label">COOKING · 3 / 8</div>
+    
+    <div class="word-title">Caramelizing</div>
+    <div class="ipa">/ˈkærəməlaɪzɪŋ/</div>
+    <div class="chinese">焦糖化 · 美拉德反应</div>
+    
+    <div class="divider"></div>
+    
+    <div class="example-box">
+      <div class="example-text">"The sugar caramelized beautifully on top of the crème brûlée."</div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">WORD MEANING</div>
+      <div class="section-content">加热糖使其融化并变成金黄色或棕色，产生焦糖风味。</div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">USAGE</div>
+      <div class="section-content">常见搭配：caramelized onions（焦糖洋葱）、caramelize sugar（熬焦糖）</div>
+    </div>
+    
+    <div class="did-you-know">
+      <div class="did-you-know-title">DID YOU KNOW?</div>
+      <div class="did-you-know-content">
+        <p><span class="hl">词源：</span>来自西班牙语 caramelo（焦糖），可能源自拉丁语 calamellus（甘蔗）。</p>
+        <p><span class="hl">记忆技巧：</span>Caramelize 需要精确控制温度，太高会苦，太低不会变色。也指洋葱等蔬菜炒到金黄软糯。</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

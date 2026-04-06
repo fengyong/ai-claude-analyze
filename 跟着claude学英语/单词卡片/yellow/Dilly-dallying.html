@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dilly-dallying - 跟着 Claude 学英语</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg-deep: #181408;
+    --bg-mid: #241e0e;
+    --accent: #f0d060;
+    --accent-light: #fff4d0;
+    --accent-dark: #d0a830;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255,255,255,0.7);
+    --text-muted: rgba(255,255,255,0.45);
+  }
+  
+  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', 'Noto Sans SC', sans-serif; }
+  
+  .card {
+    width: 1080px; height: 1920px; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #181408 0%, #241e0e 30%, #1e180a 70%, #120e06 100%);
+    color: var(--text-primary);
+  }
+  
+  .bg-orb { position: absolute; border-radius: 50%; filter: blur(150px); pointer-events: none; }
+  .bg-orb-1 { width: 700px; height: 700px; top: -250px; right: -200px; background: rgba(220,180,60,0.18); }
+  .bg-orb-2 { width: 700px; height: 700px; bottom: -100px; left: -200px; background: rgba(200,160,40,0.15); }
+  
+  .grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px); background-size: 80px 80px; pointer-events: none; }
+  .top-line { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 1px; background: linear-gradient(90deg, transparent, rgba(240,200,80,0.35), transparent); }
+  
+  .content { position: relative; z-index: 10; padding: 140px 70px 120px; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; }
+  
+  .header { margin-bottom: 50px; }
+  .series-label { font-size: 16px; font-weight: 500; color: var(--text-muted); letter-spacing: 4px; margin-bottom: 12px; }
+  .subtitle { font-size: 28px; color: var(--text-muted); font-weight: 400; }
+  
+  .word-card {
+    background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 32px; padding: 70px 55px; backdrop-filter: blur(40px);
+    margin-bottom: 40px; position: relative; overflow: hidden;
+  }
+  .word-card::before { content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); }
+  
+  .card-label { font-size: 15px; font-weight: 600; color: rgba(240,200,80,0.6); letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase; }
+  .word-en { font-size: 72px; font-weight: 800; letter-spacing: -2px; margin-bottom: 12px; background: linear-gradient(160deg, #fff4d0 0%, #f0d060 40%, #d0a830 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .word-ipa { font-size: 28px; color: var(--text-muted); font-style: italic; margin-bottom: 14px; }
+  .word-zh { font-size: 48px; font-weight: 700; color: rgba(240,200,80,0.9); margin-bottom: 30px; }
+  
+  .example-box { padding: 24px 0 24px 28px; border-left: 3px solid rgba(240,200,80,0.4); margin-bottom: 32px; }
+  .example-text { font-size: 30px; color: var(--text-secondary); font-style: italic; line-height: 1.5; }
+  
+  .info-section { margin-bottom: 24px; }
+  .info-text { font-size: 28px; color: var(--text-secondary); line-height: 1.7; }
+  .info-text .hl { color: rgba(240,200,80,0.85); font-weight: 600; }
+  
+  .trivia-box {
+    background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 24px; padding: 40px 45px; margin-top: 0;
+  }
+  .trivia-label { font-size: 15px; font-weight: 700; color: rgba(240,200,80,0.6); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; }
+  .trivia-text { font-size: 26px; color: var(--text-secondary); line-height: 1.7; }
+  .trivia-text + .trivia-text { margin-top: 20px; }
+  .trivia-text .hl { color: rgba(240,200,80,0.85); font-weight: 600; }
+  .trivia-text .hl-cyan { color: rgba(168,220,255,0.85); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div>
+  <div class="grid"></div><div class="top-line"></div>
+  
+  <div class="content">
+    <header class="header">
+      <div class="series-label">跟着 CLAUDE 学英语</div>
+      <div class="subtitle">搞笑类动词 · Funny Verbs</div>
+    </header>
+    
+    <div class="word-card">
+      <div class="card-label">FUNNY · 7 / 8</div>
+      <div class="word-en">Dilly-dallying</div>
+      <div class="word-ipa">/ˈdɪliˈdæliɪŋ/</div>
+      <div class="word-zh">磨蹭 · 浪费时间</div>
+      
+      <div class="example-box">
+        <div class="example-text">"Stop dilly-dallying and get to work!"</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-text">叠词造词，<span class="hl">听起来就很慢吞吞</span>。同义词：lollygag、dawdle。</div>
+      </div>
+      <div class="info-section">
+        <div class="info-text">父母老师最爱用的催促词，比 "hurry up" 更有画面感。</div>
+      </div>
+    </div>
+    
+    <div class="trivia-box">
+      <div class="trivia-label">Did You Know?</div>
+      <div class="trivia-text"><span class="hl-cyan">词源：</span>来自 "dilly"（愚蠢的）+ "dally"（浪费时间），18世纪开始流行。叠词让这个词听起来就像在<span class="hl">拖长音</span>。</div>
+      <div class="trivia-text"><span class="hl">Claude 提示：</span>英语有很多这种<span class="hl">叠词搞笑词</span>——dilly-dally、shilly-shally、willy-nilly。说的时候自带慢动作效果！</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
